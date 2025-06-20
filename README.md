@@ -1,106 +1,137 @@
+# CLT (v9.3) — Consolidador de Local de Trabalho (Provisionamento Automático LEMP para Debian e Derivados)
 
-# clt 🚀🇧🇷
-
-**clt** é um utilitário de linha de comando escrito em Bash, criado para **provisionar rapidamente ambientes de desenvolvimento web** em servidores que utilizam a stack **LEMP** (Linux, Nginx e PHP).
-
-Ideal para desenvolvedores que querem evitar tarefas repetitivas, o `clt` automatiza completamente a criação de diretórios de projeto, configuração de Virtual Hosts no Nginx e mapeamento local via `/etc/hosts` — tudo isso em poucos segundos.
-
----
-
-## 📦 Funcionalidades Principais
-
-O `clt` realiza, de forma sequencial e segura:
-
-- 📂 **Criação do Diretório**
-  > Gera a estrutura padrão do projeto em:  
-  > `/var/www/<nome-do-projeto>`
-
-- 🔐 **Ajuste de Permissões**
-  > Define `www-data` como proprietário do diretório, garantindo acesso correto pelo Nginx.
-
-- ✍️ **Geração da Configuração Nginx**
-  > Cria um Virtual Host personalizado em:  
-  > `/etc/nginx/sites-available/<nome-do-projeto>`  
-  > Com suporte automático a **PHP-FPM**.
-
-- 🔗 **Habilitação do Site**
-  > Cria um link simbólico em `/etc/nginx/sites-enabled/` para ativar o site.
-
-- 🌐 **Resolução de Host Local**
-  > Adiciona a entrada `<nome-do-projeto>.local` ao arquivo `/etc/hosts`, apontando para `127.0.0.1`.
-
-- ✅ **Validação e Recarga do Nginx**
-  > Testa a nova configuração (`nginx -t`) e recarrega o serviço (`systemctl reload nginx`) de forma segura e sem downtime.
+**Autor:** Carlos Henrique Tourinho Santana  
+**GitHub:** [henriquetourinho/clt](https://github.com/henriquetourinho/clt)  
+**Última atualização:** 19 de junho de 2025
 
 ---
 
-## 📋 Pré-requisitos
+## 🚀 O que é o CLT?
 
-Para utilizar o `clt`, seu ambiente precisa ter:
+O **CLT — Consolidador de Local de Trabalho** é um script Shell para **provisionamento instantâneo** de ambientes de desenvolvimento LEMP (Nginx, MariaDB/MySQL, PHP) em sistemas Debian e derivados, com foco em produtividade, padronização e automação profissional. Com um único comando, você configura ambientes para projetos estáticos, PHP puro ou WordPress, com HTTPS local e integração automática de certificados.
 
-- ✅ Sistema operacional **Linux** (testado em Debian/Ubuntu)
-- ✅ Acesso de superusuário (via `sudo`)
-- ✅ Stack **LEMP** previamente instalada:
-  - [x] **Nginx**
-  - [x] **PHP-FPM** (qualquer versão ativa)
+> **Missão:** Democratizar o acesso a ambientes de desenvolvimento profissionais para a comunidade brasileira, reduzindo barreiras técnicas e acelerando o início de novos projetos.
 
 ---
 
-## 🛠️ Instalação
+## 🛠️ Recursos Técnicos
 
-Baixe o script com `curl`:
-
-```bash
-curl -o clt.sh https://raw.githubusercontent.com/henriquetourinho/clt/main/clt.sh
-```
-
-Dê permissão de execução:
-
-```bash
-chmod +x clt.sh
-```
-
-> ℹ️ *A URL acima é apenas um exemplo. Substitua pela URL real do seu repositório.*
+- **Provisionamento automatizado:** Criação de ambientes locais completos em segundos (HTTP ou HTTPS, com/sem WordPress).
+- **Configuração de Nginx:** Geração dinâmica de virtual hosts, suporte a múltiplas versões de PHP (detecção automática do socket PHP-FPM).
+- **Banco de dados pronto:** MariaDB/MySQL com usuários e permissões isoladas por projeto.
+- **WordPress on demand:** Instalação e configuração automática, incluindo geração de `wp-config.php` e salts.
+- **SSL/HTTPS local:** Geração de certificado autoassinado, com opção `--auto-trust` para integração ao sistema operacional (cadeado verde).
+- **Página de boas-vindas:** Template HTML profissional para projetos sem WordPress.
+- **Gerenciamento prático:** Listagem de ambientes, escolha de porta customizada (`--port`), modo verboso para debug, mensagens de erro detalhadas.
+- **Atualização automática do `/etc/hosts`** para resolução local dos domínios de teste.
+- **Execução protegida:** Script só roda como root, evita sobrescrita de ambientes existentes.
 
 ---
 
-## ▶️ Como Usar
+## 🎯 Exemplos de Uso (CLI)
 
-Execute o script com `sudo`, passando o nome do projeto como argumento:
-
-```bash
-sudo ./clt.sh <nome-do-projeto>
-```
-
-O nome será usado para:
-- Nomear a pasta (`/var/www/<nome>`)
-- Criar o Virtual Host
-- Criar o domínio local (`<nome>.local`)
-
----
-
-## 💡 Exemplos
-
-Criar um projeto acessível em `http://meu-site.local`:
+Execute sempre como **root** (`sudo`):
 
 ```bash
-sudo ./clt.sh meu-site
-```
+# Criar site estático simples (HTTP)
+sudo ./clt.sh meu-projeto
 
-Criar uma API local em `http://nova-api.local`:
+# Criar site com HTTPS (SSL)
+sudo ./clt.sh site-seguro --ssl
 
-```bash
-sudo ./clt.sh nova-api
+# Criar ambiente WordPress (HTTP)
+sudo ./clt.sh meu-blog-wp --wordpress
+
+# WordPress com HTTPS e certificado confiável (cadeado verde)
+sudo ./clt.sh meu-painel-wp --wordpress --ssl --auto-trust
+
+# Listar todos os ambientes criados
+sudo ./clt.sh list
+
+# Definir porta customizada (exemplo: 8080)
+sudo ./clt.sh api-local --port=8080
+
+# Modo detalhado (debug)
+sudo ./clt.sh meu-projeto --verbose
 ```
 
 ---
 
-## 🧪 Testado e Validado
+## 📋 Pré-Requisitos
 
-Desenvolvido por [Carlos Henrique Tourinho Santana](https://github.com/henriquetourinho), testado em ambientes reais de desenvolvimento para **ganho de tempo**, **padronização** e **simplicidade** no dia a dia.
+- **SO:** Debian ou qualquer distribuição derivada (ex: Kali, LMDE, MX Linux, etc)
+- **Permissão:** root (sudo)
+- **Pacotes obrigatórios:**  
+  `nginx`, `systemctl`, `find`, `grep`, `tr`, `chmod`, `chown`, `cp`, `openssl`, `update-ca-certificates`
+- **WordPress:**  
+  `curl`, `tar`, `mysql` (MariaDB ou MySQL Server)
+- O script identifica dependências ausentes e orienta a instalação.
 
 ---
 
-## 📜 Licença
+## 🧩 O que está incluído em cada ambiente?
 
-Este projeto está licenciado sob a **MIT License**. Veja o arquivo `LICENSE` no repositório para mais detalhes.
+- **Nginx:** Virtual host dedicado, pronto para produção local.
+- **Banco de Dados:** MariaDB/MySQL com usuário e senha exclusivos por projeto.
+- **PHP-FPM:** Compatível com múltiplas versões (auto-detecta o socket).
+- **HTTPS/SSL:** Certificado autoassinado gerado automaticamente (opcional auto-trust no sistema).
+- **WordPress:** Instalação e configuração completa com um comando.
+- **Página inicial HTML:** Para ambientes não-WordPress.
+- **DNS local:** Adição automática ao `/etc/hosts`.
+- **Ambientes independentes:** Isolamento por nome de projeto.
+
+---
+
+## 🔐 Segurança e Boas Práticas
+
+- Execução restrita a root/admin
+- Não sobrescreve ambientes existentes
+- Geração automática de senhas seguras para bancos de dados
+- Fácil remoção manual: basta apagar o diretório do projeto e as configs do Nginx
+
+---
+
+## 💸 Valor agregado
+
+| Serviço Profissional      | Tempo Médio | Custo de Mercado   |
+|--------------------------|-------------|--------------------|
+| Freelancer Júnior         | 1h a 2h     | R$ 150 – R$ 300    |
+| Dev Pleno/Sênior          | 1h a 1h30   | R$ 300 – R$ 700    |
+| Agência Especializada     | 2h a 4h     | R$ 800 – R$ 1.500+ |
+
+Com o **CLT**, o ambiente fica pronto em **menos de 30 segundos**. 🇧🇷
+
+---
+
+## 🎬 Demonstração do Funcionamento
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/henriquetourinho/clt/main/media/funcionamento.gif" alt="Funcionamento do CLT" width="700">
+</p>
+
+---
+
+## 🤝 Apoie o Projeto
+
+Se o CLT foi útil, considere apoiar para manter a iniciativa viva e em evolução para toda a comunidade:
+
+**Chave Pix:**  
+```
+poupanca@henriquetourinho.com.br
+```
+
+---
+
+### Licença
+
+Este projeto é distribuído sob a **GPL-3.0 license**. Veja o arquivo `LICENSE` para mais detalhes.
+
+## 🙋‍♂️ Desenvolvido por
+
+**Carlos Henrique Tourinho Santana** 📍 Salvador - Bahia  
+<br>
+🔗 Wiki Debian: [wiki.debian.org/henriquetourinho](https://wiki.debian.org/henriquetourinho)  
+<br>
+🔗 LinkedIn: [br.linkedin.com/in/carloshenriquetourinhosantana](https://br.linkedin.com/in/carloshenriquetourinhosantana)  
+<br>
+🔗 GitHub: [github.com/henriquetourinho](https://github.com/henriquetourinho)
