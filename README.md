@@ -2,7 +2,7 @@
 
 **Autor:** Carlos Henrique Tourinho Santana  
 **GitHub:** [henriquetourinho/clt](https://github.com/henriquetourinho/clt)  
-**Última atualização:** 19 de junho de 2025
+**Última atualização:** 20 de junho de 2025
 
 ---
 
