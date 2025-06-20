@@ -1,4 +1,4 @@
-# CLT (v9.3) — Consolidador de Local de Trabalho (Provisionamento Automático LEMP para Debian e Derivados)
+# CLT (v9.3) — Consolidador de Local de Trabalho
 
 **Autor:** Carlos Henrique Tourinho Santana  
 **GitHub:** [henriquetourinho/clt](https://github.com/henriquetourinho/clt)  
@@ -11,6 +11,22 @@
 O **CLT — Consolidador de Local de Trabalho** é um script Shell para **provisionamento instantâneo** de ambientes de desenvolvimento LEMP (Nginx, MariaDB/MySQL, PHP) em sistemas Debian e derivados, com foco em produtividade, padronização e automação profissional. Com um único comando, você configura ambientes para projetos estáticos, PHP puro ou WordPress, com HTTPS local e integração automática de certificados.
 
 > **Missão:** Democratizar o acesso a ambientes de desenvolvimento profissionais para a comunidade brasileira, reduzindo barreiras técnicas e acelerando o início de novos projetos.
+
+---
+
+## 🆕 Instalação facilitada: agora também via pacote `.deb`!
+
+Agora ficou ainda mais fácil instalar e atualizar o CLT!  
+Baixe o arquivo `.deb` disponível na [seção de Releases](https://github.com/henriquetourinho/clt/releases) e instale com um só comando:
+
+```bash
+sudo dpkg -i clt.deb
+```
+
+- Instalação automatizada, rápida e segura
+- Sem necessidade de clonar ou copiar scripts manualmente
+- Atualização fácil: basta instalar o novo `.deb` quando houver uma nova versão
+- O comando `clt.sh` estará disponível no seu sistema!
 
 ---
 
