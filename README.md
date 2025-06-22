@@ -84,6 +84,31 @@ sudo ./clt.sh status meu-blog
 sudo ./clt.sh list
 ```
 
+### Para a versão legado (clt_legado.sh)
+
+```bash
+# Criar projeto com página HTML
+sudo ./clt_legado.sh create meu-site
+
+# Criar com WordPress e SSL
+sudo ./clt_legado.sh create blog-wp --wordpress --ssl
+
+# Criar WordPress com SSL confiável
+sudo ./clt_legado.sh create painel-wp --wordpress --ssl --auto-trust
+
+# Deletar projeto
+sudo ./clt_legado.sh delete meu-site
+
+# Fazer backup completo
+sudo ./clt_legado.sh backup blog-wp
+
+# Checar status
+sudo ./clt_legado.sh status blog-wp
+
+# Listar todos os projetos
+sudo ./clt_legado.sh list
+```
+
 ---
 
 ## 📋 Pré-Requisitos
