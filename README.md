@@ -1,125 +1,139 @@
-# CLT (v9.3) — Consolidador de Local de Trabalho
+# CLT (v9.9 LEGADO) — Consolidador de Local de Trabalho  
+**Provisionamento Automático LEMP para Debian e Derivados**
 
 **Autor:** Carlos Henrique Tourinho Santana  
 **GitHub:** [henriquetourinho/clt](https://github.com/henriquetourinho/clt)  
-**Última atualização:** 20 de junho de 2025
+**Última atualização:** 22 de junho de 2025
 
 ---
 
 ## 🚀 O que é o CLT?
 
-O **CLT — Consolidador de Local de Trabalho** é um script Shell para **provisionamento instantâneo** de ambientes de desenvolvimento LEMP (Nginx, MariaDB/MySQL, PHP) em sistemas Debian e derivados, com foco em produtividade, padronização e automação profissional. Com um único comando, você configura ambientes para projetos estáticos, PHP puro ou WordPress, com HTTPS local e integração automática de certificados.
+O **CLT — Consolidador de Local de Trabalho** é uma ferramenta de automação para criar ambientes de desenvolvimento LEMP (Linux + Nginx + MySQL/MariaDB + PHP), com foco em acessibilidade, inclusão e velocidade.
 
-> **Missão:** Democratizar o acesso a ambientes de desenvolvimento profissionais para a comunidade brasileira, reduzindo barreiras técnicas e acelerando o início de novos projetos.
+Foi criado com uma missão clara:
+
+> **No Brasil, muita gente desiste de programar antes mesmo de começar.**  
+> Por barreiras técnicas, falta de apoio ou por não conseguir configurar nem o básico.  
+> O CLT foi criado para resolver esse problema.
+
+A proposta do CLT é derrubar uma das maiores barreiras da programação: **configurar um ambiente local de forma profissional, segura e automatizada.**
 
 ---
 
-## 🆕 Instalação facilitada: agora também via pacote `.deb`!
+## 🧱 Versões Disponíveis
 
-Agora ficou ainda mais fácil instalar e atualizar o CLT!  
-Baixe o arquivo `.deb` disponível na [seção de Releases](https://github.com/henriquetourinho/clt/releases) e instale com um só comando:
+### `clt.sh` (padrão)  
+Versão principal, ativa, modular e compatível com todas as funções.
 
-```bash
-sudo dpkg -i clt.deb
-```
+### `clt_legado.sh` (v9.9 - FINAL)  
+Última versão em Shell Script com recursos extras: `delete`, `status`, `backup`, `log`, e aviso de legado.
 
-- Instalação automatizada, rápida e segura
-- Sem necessidade de clonar ou copiar scripts manualmente
-- Atualização fácil: basta instalar o novo `.deb` quando houver uma nova versão
-- O comando `clt.sh` estará disponível no seu sistema!
+> ⚠️ A partir da versão 10, o CLT evolui para Python.  
+> O `clt_legado.sh` permanecerá no repositório como versão estável, documentada e funcional — ideal para quem quer simplicidade e rapidez via Shell.
 
 ---
 
 ## 🛠️ Recursos Técnicos
 
-- **Provisionamento automatizado:** Criação de ambientes locais completos em segundos (HTTP ou HTTPS, com/sem WordPress).
-- **Configuração de Nginx:** Geração dinâmica de virtual hosts, suporte a múltiplas versões de PHP (detecção automática do socket PHP-FPM).
-- **Banco de dados pronto:** MariaDB/MySQL com usuários e permissões isoladas por projeto.
-- **WordPress on demand:** Instalação e configuração automática, incluindo geração de `wp-config.php` e salts.
-- **SSL/HTTPS local:** Geração de certificado autoassinado, com opção `--auto-trust` para integração ao sistema operacional (cadeado verde).
-- **Página de boas-vindas:** Template HTML profissional para projetos sem WordPress.
-- **Gerenciamento prático:** Listagem de ambientes, escolha de porta customizada (`--port`), modo verboso para debug, mensagens de erro detalhadas.
-- **Atualização automática do `/etc/hosts`** para resolução local dos domínios de teste.
-- **Execução protegida:** Script só roda como root, evita sobrescrita de ambientes existentes.
+- Criação automática de ambientes locais LEMP
+- Instalação completa do WordPress com banco e configurações
+- SSL local com certificado autoassinado e auto-confiança opcional (`--auto-trust`)
+- Atualização automática do `/etc/hosts`
+- Página de boas-vindas HTML personalizada
+- Comando `list` para listar ambientes existentes
+- Comando `delete` para remoção completa de ambientes
+- Comando `status` para verificação de funcionamento
+- Comando `backup` para exportar `.tar.gz` + banco `.sql`
+- Log de todas as ações em `/var/log/clt.log`
 
 ---
 
-## 🎯 Exemplos de Uso (CLI)
+## 🧩 O que está incluído em cada ambiente?
 
-Execute sempre como **root** (`sudo`):
+- **Nginx:** Virtual host dedicado com root isolado
+- **Banco de Dados:** Usuário/senha exclusivos por projeto
+- **PHP-FPM:** Suporte a várias versões (detecção automática)
+- **WordPress:** Com configuração automática (`wp-config.php`, salts, db)
+- **Página HTML:** Para ambientes não-WordPress
+- **HTTPS:** SSL automático com opção de confiança local
+- **Backup:** Exporta estrutura + DB + config
+- **Log:** Todas as ações registradas
+
+---
+
+## 🎯 Exemplos de Uso
 
 ```bash
-# Criar site estático simples (HTTP)
-sudo ./clt.sh meu-projeto
+# Criar projeto HTML
+sudo ./clt.sh meu-site
 
-# Criar site com HTTPS (SSL)
-sudo ./clt.sh site-seguro --ssl
+# Criar WordPress com HTTPS e confiança
+sudo ./clt.sh meu-blog --wordpress --ssl --auto-trust
 
-# Criar ambiente WordPress (HTTP)
-sudo ./clt.sh meu-blog-wp --wordpress
+# Apagar um projeto
+sudo ./clt.sh delete meu-site
 
-# WordPress com HTTPS e certificado confiável (cadeado verde)
-sudo ./clt.sh meu-painel-wp --wordpress --ssl --auto-trust
+# Fazer backup completo
+sudo ./clt.sh backup meu-site
 
-# Listar todos os ambientes criados
+# Verificar status de um site
+sudo ./clt.sh status meu-blog
+
+# Listar projetos existentes
 sudo ./clt.sh list
-
-# Definir porta customizada (exemplo: 8080)
-sudo ./clt.sh api-local --port=8080
-
-# Modo detalhado (debug)
-sudo ./clt.sh meu-projeto --verbose
 ```
 
 ---
 
 ## 📋 Pré-Requisitos
 
-- **SO:** Debian ou qualquer distribuição derivada (ex: Kali, LMDE, MX Linux, etc)
+- **Distribuição:** Debian e derivados
 - **Permissão:** root (sudo)
 - **Pacotes obrigatórios:**  
-  `nginx`, `systemctl`, `find`, `grep`, `tr`, `chmod`, `chown`, `cp`, `openssl`, `update-ca-certificates`
-- **WordPress:**  
-  `curl`, `tar`, `mysql` (MariaDB ou MySQL Server)
-- O script identifica dependências ausentes e orienta a instalação.
+  `nginx`, `php`, `php-fpm`, `openssl`, `mysql/mariadb`, `curl`, `tar`, `grep`, `find`, `tr`, `update-ca-certificates`
 
 ---
 
-## 🧩 O que está incluído em cada ambiente?
+## 💾 Backup
 
-- **Nginx:** Virtual host dedicado, pronto para produção local.
-- **Banco de Dados:** MariaDB/MySQL com usuário e senha exclusivos por projeto.
-- **PHP-FPM:** Compatível com múltiplas versões (auto-detecta o socket).
-- **HTTPS/SSL:** Certificado autoassinado gerado automaticamente (opcional auto-trust no sistema).
-- **WordPress:** Instalação e configuração completa com um comando.
-- **Página inicial HTML:** Para ambientes não-WordPress.
-- **DNS local:** Adição automática ao `/etc/hosts`.
-- **Ambientes independentes:** Isolamento por nome de projeto.
+A função `backup` salva:
+- Arquivos HTML/PHP/WordPress do projeto
+- Configuração do Nginx
+- Certificados SSL
+- Banco de dados (via `mysqldump`)
+- Log do processo
+
+Arquivo gerado:  
+```bash
+/var/backups/clt/nome-do-projeto-AAAA-MM-DD-HHMM.tar.gz
+```
 
 ---
 
-## 🔐 Segurança e Boas Práticas
+## 🔐 Segurança
 
-- Execução restrita a root/admin
-- Não sobrescreve ambientes existentes
+- Verificação de nomes inválidos (`rm`, `etc`, `mysql` etc)
 - Geração automática de senhas seguras para bancos de dados
-- Fácil remoção manual: basta apagar o diretório do projeto e as configs do Nginx
+- Execução restrita a root
+- Evita sobrescrita de projetos existentes
+- Logs de tudo em `/var/log/clt.log`
 
 ---
 
 ## 💸 Valor agregado
 
-| Serviço Profissional      | Tempo Médio | Custo de Mercado   |
-|--------------------------|-------------|--------------------|
-| Freelancer Júnior         | 1h a 2h     | R$ 150 – R$ 300    |
-| Dev Pleno/Sênior          | 1h a 1h30   | R$ 300 – R$ 700    |
-| Agência Especializada     | 2h a 4h     | R$ 800 – R$ 1.500+ |
+| Serviço Profissional | Tempo Médio | Custo de Mercado   |
+|----------------------|-------------|--------------------|
+| Freelancer Júnior    | 1h a 2h     | R$ 150 – R$ 300    |
+| Dev Pleno/Sênior     | 1h a 1h30   | R$ 300 – R$ 700    |
+| Agência Especializada| 2h a 4h     | R$ 800 – R$ 1.500+ |
 
-Com o **CLT**, o ambiente fica pronto em **menos de 30 segundos**. 🇧🇷
+**Com o CLT, tudo fica pronto em até 30 segundos.**
 
 ---
 
-## 🎬 Demonstração do Funcionamento
+## 🎬 Demonstração
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/henriquetourinho/clt/main/media/funcionamento.gif" alt="Funcionamento do CLT" width="700">
@@ -127,9 +141,21 @@ Com o **CLT**, o ambiente fica pronto em **menos de 30 segundos**. 🇧🇷
 
 ---
 
+## 🧠 E o futuro?
+
+A partir da próxima versão, o CLT será reescrito em **Python**, com:
+- Plugins
+- Interface gráfica
+- Integração com Docker e Git
+- Painel web local
+- Sistema de backup avançado
+- Estrutura modular e expansível
+
+---
+
 ## 🤝 Apoie o Projeto
 
-Se o CLT foi útil, considere apoiar para manter a iniciativa viva e em evolução para toda a comunidade:
+Se o CLT foi útil, considere apoiar para manter a iniciativa gratuita e em expansão:
 
 **Chave Pix:**  
 ```
@@ -138,16 +164,17 @@ poupanca@henriquetourinho.com.br
 
 ---
 
-### Licença
+## 📜 Licença
 
-Este projeto é distribuído sob a **GPL-3.0 license**. Veja o arquivo `LICENSE` para mais detalhes.
+Distribuído sob **GPL-3.0 license**. Veja o arquivo `LICENSE`.
+
+---
 
 ## 🙋‍♂️ Desenvolvido por
 
-**Carlos Henrique Tourinho Santana** 📍 Salvador - Bahia  
-<br>
+**Carlos Henrique Tourinho Santana**  
+📍 Salvador - Bahia, Brasil  
+
 🔗 Wiki Debian: [wiki.debian.org/henriquetourinho](https://wiki.debian.org/henriquetourinho)  
-<br>
 🔗 LinkedIn: [br.linkedin.com/in/carloshenriquetourinhosantana](https://br.linkedin.com/in/carloshenriquetourinhosantana)  
-<br>
 🔗 GitHub: [github.com/henriquetourinho](https://github.com/henriquetourinho)
